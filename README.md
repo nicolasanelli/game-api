@@ -1,5 +1,7 @@
 # Game API as Monolit
 
+[![Java CI with Maven](https://github.com/nicolasanelli/game-api/actions/workflows/maven.yml/badge.svg)](https://github.com/nicolasanelli/game-api/actions/workflows/maven.yml)
+
 ### What do I have
 These are the features that I've done for now
 
