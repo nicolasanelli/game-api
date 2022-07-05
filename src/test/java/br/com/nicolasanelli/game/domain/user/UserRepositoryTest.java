@@ -21,34 +21,34 @@ public class UserRepositoryTest {
 
     @Test
     void test_newId() {
-        assertEquals(4, repository.newId());
-        assertEquals(5, repository.newId());
-        assertEquals(6, repository.newId());
+        assertEquals(2, repository.newId());
     }
 
     @Test
     void test_list() {
-        assertEquals(2, repository.list().size());
+        assertEquals(0, repository.list().size());
     }
 
     @Test
     void test_saveShouldInsert() {
-        assertEquals(2, repository.list().size());
+        assertEquals(0, repository.list().size());
         repository.save(user);
-        assertEquals(3, repository.list().size());
+        assertEquals(1, repository.list().size());
     }
 
     @Test
     void test_saveShouldUpdate() {
-        User user = new User(1, "username", "email", "password");
-
-        assertEquals(2, repository.list().size());
+        assertEquals(0, repository.list().size());
         repository.save(user);
-        assertEquals(2, repository.list().size());
+        assertEquals(1, repository.list().size());
+        repository.save(user);
+        assertEquals(1, repository.list().size());
     }
 
     @Test
     void test_findById() {
+        repository.save(user);
+
         User user = repository.findById(1).get();
         assertEquals(1, user.getId());
     }
@@ -56,6 +56,6 @@ public class UserRepositoryTest {
     @Test
     void test_removeById() {
         repository.removeById(1);
-        assertEquals(1, repository.list().size());
+        assertEquals(0, repository.list().size());
     }
 }

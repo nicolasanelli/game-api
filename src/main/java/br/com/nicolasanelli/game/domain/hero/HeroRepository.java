@@ -1,5 +1,6 @@
 package br.com.nicolasanelli.game.domain.hero;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -7,24 +8,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
+@NoArgsConstructor
 public class HeroRepository {
     private Integer nextId = 1;
     private List<Hero> heroes = new ArrayList<>();
 
-    public HeroRepository() {
-        heroes.add(new Hero(newId(), 1, "Kat Loyalar"));
-        heroes.add(new Hero(newId(), 1, "Brad Loyalar"));
-        heroes.add(new Hero(newId(), 2, "Jin"));
-        heroes.add(new Hero(newId(), 2, "Groonch"));
-    }
-
     public Integer newId() {
         return this.nextId++;
     }
-
 
     public void save(Hero hero){
         if (existsWithId(hero.getId())) {

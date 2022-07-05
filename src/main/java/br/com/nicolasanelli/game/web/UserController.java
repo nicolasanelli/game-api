@@ -4,7 +4,6 @@ import br.com.nicolasanelli.game.application.user.CreateUserCommand;
 import br.com.nicolasanelli.game.application.user.UpdateUserCommand;
 import br.com.nicolasanelli.game.application.user.UserServiceApplication;
 import br.com.nicolasanelli.game.domain.user.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,8 +12,11 @@ import java.util.List;
 @RequestMapping("api/v1/users")
 public class UserController {
 
-    @Autowired
-    private UserServiceApplication service;
+    private final UserServiceApplication service;
+
+    public UserController(UserServiceApplication service) {
+        this.service = service;
+    }
 
     @GetMapping
     public List<User> list() {

@@ -3,7 +3,6 @@ package br.com.nicolasanelli.game.application.hero;
 import br.com.nicolasanelli.game.domain.hero.Hero;
 import br.com.nicolasanelli.game.domain.hero.HeroRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class HeroServiceApplication {
 
-    @Autowired
-    private HeroRepository repository;
+    private final HeroRepository repository;
 
     public void create(CreateHeroCommand command) {
         Hero hero = new Hero(

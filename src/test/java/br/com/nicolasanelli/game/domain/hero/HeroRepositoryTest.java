@@ -23,34 +23,34 @@ public class HeroRepositoryTest {
 
     @Test
     void test_newId() {
-        assertEquals(6, repository.newId());
-        assertEquals(7, repository.newId());
-        assertEquals(8, repository.newId());
+        assertEquals(2, repository.newId());
     }
 
     @Test
     void test_list() {
-        assertEquals(4, repository.list().size());
+        assertEquals(0, repository.list().size());
     }
 
     @Test
     void test_saveShouldInsert() {
-        assertEquals(4, repository.list().size());
+        assertEquals(0, repository.list().size());
         repository.save(hero);
-        assertEquals(5, repository.list().size());
+        assertEquals(1, repository.list().size());
     }
 
     @Test
     void test_saveShouldUpdate() {
-        Hero hero = new Hero(1, 1, "Some Guy");
-
-        assertEquals(4, repository.list().size());
+        assertEquals(0, repository.list().size());
         repository.save(hero);
-        assertEquals(4, repository.list().size());
+        assertEquals(1, repository.list().size());
+        repository.save(hero);
+        assertEquals(1, repository.list().size());
     }
 
     @Test
     void test_findById() {
+        repository.save(hero);
+
         Hero hero = repository.findById(1).get();
         assertEquals(1, hero.getId());
     }
@@ -58,12 +58,12 @@ public class HeroRepositoryTest {
     @Test
     void test_removeById() {
         repository.removeById(1);
-        assertEquals(3, repository.list().size());
+        assertEquals(0, repository.list().size());
     }
 
     @Test
     void test_listByUserId() {
         List<Hero> heroes = repository.listByUserId(1);
-        assertEquals(2, heroes.size());
+        assertEquals(0, heroes.size());
     }
 }

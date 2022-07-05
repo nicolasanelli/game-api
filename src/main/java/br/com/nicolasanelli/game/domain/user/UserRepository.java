@@ -1,5 +1,6 @@
 package br.com.nicolasanelli.game.domain.user;
 
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,14 +10,10 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@NoArgsConstructor
 public class UserRepository {
     private Integer nextId = 1;
     private List<User> users = new ArrayList<>();
-
-    public UserRepository() {
-        users.add(new User(this.newId(), "nicolasanelli", "nicolas@email.com", "123"));
-        users.add(new User(this.newId(), "maria123", "maria@email.com", "123"));
-    }
 
     public Integer newId() {
         return this.nextId++;
@@ -59,5 +56,9 @@ public class UserRepository {
         users = users.stream()
                 .sorted(Comparator.comparing(User::getId))
                 .collect(Collectors.toList());
+    }
+
+    public Optional<User> findByName(String username) {
+        return users.stream().filter(u -> username.equals(u.getUsername())).findFirst();
     }
 }

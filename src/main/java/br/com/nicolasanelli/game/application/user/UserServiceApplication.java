@@ -3,7 +3,7 @@ package br.com.nicolasanelli.game.application.user;
 import br.com.nicolasanelli.game.domain.user.User;
 import br.com.nicolasanelli.game.domain.user.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,15 +12,15 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceApplication {
 
-    @Autowired
-    private UserRepository repository;
+    private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     public void create(CreateUserCommand command) {
         User user = new User(
                 repository.newId(),
                 command.getUsername(),
                 command.getEmail(),
-                command.getPassword());
+                passwordEncoder.encode(command.getPassword()));
 
         repository.save(user);
     }

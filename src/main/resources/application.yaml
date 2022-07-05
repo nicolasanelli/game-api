@@ -1,0 +1,10 @@
+application:
+  admin:
+    enabled: ${ADMIN_ENABLED:true}
+    username: ${ADMIN_USERNAME:admin}
+    email: ${ADMIN_EMAIL:admin@email.com}
+    password: ${ADMIN_PASSWORD:123}
+  jwt:
+    secretKey: ${JWT_SECRETKEY:thisismysupersecretandsecurehiddenkey}
+    tokenPrefix: ${JWT_TOKEN_PREFIX:Bearer}
+    expirationAfterDays: ${JWT_EXPIRATION_DAYS:30}
