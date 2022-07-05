@@ -2,18 +2,21 @@ package br.com.nicolasanelli.game.application.user;
 
 import br.com.nicolasanelli.game.domain.user.User;
 import br.com.nicolasanelli.game.domain.user.UserRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class UserServiceApplication {
 
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+
+    public UserServiceApplication(UserRepository repository, PasswordEncoder passwordEncoder) {
+        this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public void create(CreateUserCommand command) {
         User user = new User(

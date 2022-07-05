@@ -1,11 +1,19 @@
 package br.com.nicolasanelli.game.application.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public class UpdateUserCommand {
-    private String username;
-    private String email;
+    private final String username;
+    private final String email;
+
+    public UpdateUserCommand(String username, String email) {
+        this.username = username;
+        this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

@@ -43,6 +43,7 @@ public class ApplicationSecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtConfig))
                 .addFilterAfter(new JwtVerifierFilter(jwtConfig), JwtAuthenticationFilter.class)
                 .authorizeRequests()
+                .antMatchers("/actuator/**").permitAll()
                 .anyRequest()
                 .authenticated()
         ;

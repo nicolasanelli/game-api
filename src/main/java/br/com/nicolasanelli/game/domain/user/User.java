@@ -1,13 +1,7 @@
 package br.com.nicolasanelli.game.domain.user;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
-@Setter(AccessLevel.PRIVATE)
-@Getter
 public class User {
 
     private Integer id;
@@ -29,5 +23,53 @@ public class User {
         this.setUsername(username);
         this.setEmail(email);
         this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    private void setId(Integer id) {
+        this.id = id;
+    }
+
+    private void setUsername(String username) {
+        this.username = username;
+    }
+
+    private void setEmail(String email) {
+        this.email = email;
+    }
+
+    private void setPassword(String password) {
+        this.password = password;
+    }
+
+    private void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    private void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 }

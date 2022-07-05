@@ -1,6 +1,5 @@
 package br.com.nicolasanelli.game.domain.hero;
 
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@NoArgsConstructor
 public class HeroRepository {
     private Integer nextId = 1;
     private List<Hero> heroes = new ArrayList<>();

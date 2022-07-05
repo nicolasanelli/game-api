@@ -1,17 +1,19 @@
 package br.com.nicolasanelli.game.config.auth;
 
 import br.com.nicolasanelli.game.domain.user.User;
-import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
 
-@AllArgsConstructor
 public class ApplicationUser implements UserDetails {
 
-    private User user;
+    private final User user;
+
+    public ApplicationUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
