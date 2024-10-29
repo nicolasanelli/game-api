@@ -11,8 +11,8 @@ public class CreateUserCommandTest {
                 "username", "email", "password"
         );
 
-        assertEquals("username", command.getUsername());
-        assertEquals("email", command.getEmail());
-        assertEquals("password", command.getPassword());
+        assertEquals("username", command.username());
+        assertEquals("email", command.email());
+        assertEquals("password", command.password());
     }
 }

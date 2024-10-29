@@ -11,7 +11,7 @@ public class UpdateUserCommandTest {
                 "username", "email"
         );
 
-        assertEquals("username", command.getUsername());
-        assertEquals("email", command.getEmail());
+        assertEquals("username", command.username());
+        assertEquals("email", command.email());
     }
 }

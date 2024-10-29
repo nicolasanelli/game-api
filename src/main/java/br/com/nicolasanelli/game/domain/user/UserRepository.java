@@ -59,4 +59,8 @@ public class UserRepository {
     public Optional<User> findByName(String username) {
         return users.stream().filter(u -> username.equals(u.getUsername())).findFirst();
     }
+
+    public Optional<User> findByEmail(String email) {
+        return users.stream().filter(u -> email.equals(u.getEmail())).findFirst();
+    }
 }

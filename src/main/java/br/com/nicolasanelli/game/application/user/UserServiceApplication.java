@@ -21,9 +21,9 @@ public class UserServiceApplication {
     public void create(CreateUserCommand command) {
         User user = new User(
                 repository.newId(),
-                command.getUsername(),
-                command.getEmail(),
-                passwordEncoder.encode(command.getPassword()));
+                command.username(),
+                command.email(),
+                passwordEncoder.encode(command.password()));
 
         repository.save(user);
     }
@@ -41,7 +41,7 @@ public class UserServiceApplication {
         User user = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        user.update(command.getUsername(), command.getEmail());
+        user.update(command.username(), command.email());
 
         repository.save(user);
     }

@@ -18,8 +18,8 @@ public class HeroServiceApplication {
     public void create(CreateHeroCommand command) {
         Hero hero = new Hero(
                 repository.newId(),
-                command.getUserId(),
-                command.getName()
+                command.userId(),
+                command.name()
         );
         repository.save(hero);
     }

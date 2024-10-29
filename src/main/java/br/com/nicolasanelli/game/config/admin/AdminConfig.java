@@ -2,8 +2,8 @@ package br.com.nicolasanelli.game.config.admin;
 
 import br.com.nicolasanelli.game.application.user.CreateUserCommand;
 import br.com.nicolasanelli.game.application.user.UserServiceApplication;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -24,7 +24,7 @@ public class AdminConfig {
         this.service = service;
     }
 
-    @Bean
+    @PostConstruct
     public void setup() {
         if (enabled) {
             service.create(new CreateUserCommand(username, email, password));

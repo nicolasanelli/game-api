@@ -1,66 +1,84 @@
 package br.com.nicolasanelli.game.config.jwt;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import org.springframework.security.authentication.AuthenticationManager;
+import io.jsonwebtoken.JwtException;
+import io.micrometer.common.lang.NonNull;
+import jakarta.servlet.ServletException;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.core.context.SecurityContextHolder;
 
-import javax.servlet.FilterChain;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
+
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
-import static java.sql.Date.valueOf;
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    private final AuthenticationManager authenticationManager;
+    private final HandlerExceptionResolver handlerExceptionResolver;
+    private final UserDetailsService userDetailsService;
     private final JwtConfig jwtConfig;
+    private final JwtService jwtService;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtConfig jwtConfig) {
-        this.authenticationManager = authenticationManager;
+    public JwtAuthenticationFilter(HandlerExceptionResolver handlerExceptionResolver,
+                                   UserDetailsService userDetailsService,
+                                   JwtConfig jwtConfig,
+                                   JwtService jwtService) {
+        this.handlerExceptionResolver = handlerExceptionResolver;
+        this.userDetailsService = userDetailsService;
         this.jwtConfig = jwtConfig;
+        this.jwtService = jwtService;
     }
 
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+    // https://medium.com/@tericcabrel/implement-jwt-authentication-in-a-spring-boot-3-application-5839e4fd8fac
+    protected void doFilterInternal(@NonNull HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
+
+        if(Strings.isEmpty(authorizationHeader) || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(), "");
+        token = token.replace(" ", "");
 
         try {
-            LoginCommand login = new ObjectMapper()
-                    .readValue(request.getInputStream(), LoginCommand.class);
+            String username = jwtService.extractUsername(token);
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    login.getUsername(),
-                    login.getPassword()
-            );
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            return authenticationManager.authenticate(authentication);
+            if (username != null && authentication == null ) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+                if (jwtService.isTokenValid(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+
+            filterChain.doFilter(request, response);
+
+        } catch (JwtException exception) {
+            handlerExceptionResolver.resolveException(request, response, null, exception);
         }
-    }
-
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain chain,
-                                            Authentication authResult) {
-        String token = Jwts.builder()
-                .setSubject(authResult.getName())
-                .claim("authorities", List.of()) // TODO
-                .setIssuedAt(new Date())
-                .setExpiration(valueOf(LocalDate.now().plusDays(jwtConfig.getExpirationAfterDays())))
-                .signWith(jwtConfig.secretKey())
-                .compact();
-
-        response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix()+ " " + token);
     }
 }

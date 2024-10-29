@@ -1,6 +1,8 @@
 package br.com.nicolasanelli.game.config.auth;
 
 import br.com.nicolasanelli.game.domain.user.UserRepository;
+import br.com.nicolasanelli.game.exceptions.ApiError;
+import br.com.nicolasanelli.game.exceptions.AuthorizationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,8 +17,8 @@ public class ApplicationUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByName(username)
+        return userRepository.findByEmail(username)
                 .map(ApplicationUser::new)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format("Username %s not found", username)));
+                .orElseThrow(() -> new AuthorizationException(new ApiError("401.001", String.format("Username %s not found", username))));
     }
 }

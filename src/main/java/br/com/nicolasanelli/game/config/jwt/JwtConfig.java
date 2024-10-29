@@ -10,11 +10,11 @@ import javax.crypto.SecretKey;
 @Configuration
 public class JwtConfig {
 
-    @Value("${application.jwt.secretKey}")
+    @Value("${security.jwt.secretKey}")
     private String secretKey;
-    @Value("${application.jwt.tokenPrefix}")
+    @Value("${security.jwt.tokenPrefix}")
     private String tokenPrefix;
-    @Value("${application.jwt.expirationAfterDays}")
+    @Value("${security.jwt.expirationAfterDays}")
     private Integer expirationAfterDays;
 
     public SecretKey secretKey() {

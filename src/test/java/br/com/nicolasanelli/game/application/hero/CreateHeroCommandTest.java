@@ -10,7 +10,7 @@ public class CreateHeroCommandTest {
     void test_create() {
         CreateHeroCommand command = new CreateHeroCommand(12, "Some Hero");
 
-        assertEquals(12, command.getUserId());
-        assertEquals("Some Hero", command.getName());
+        assertEquals(12, command.userId());
+        assertEquals("Some Hero", command.name());
     }
 }
